@@ -26,9 +26,9 @@ bool checkSPD(X& matrix) {
 template <class X>
 X randomSPD() {
 
-	X mat = X::Random();
+	X matrix = X::Random();
 
-	return mat*mat.transpose();
+	return matrix*matrix.transpose();
 }
 
 

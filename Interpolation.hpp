@@ -58,17 +58,13 @@ template <class X>
 double klDivergence(X&, X&);
 
 template<class X>
-void writeInterpolation(vector< vector<X> >&, const char*);
+void writeInterpolations(vector< vector<X> >&, const char*);
 
 template<class X>
 void writeMatrix(X&, ofstream&);
 
-template<class X>
-void writeEigenvalues(X&, ofstream&);
-
-template<class X>
-void writeEigenvectors(X&, ofstream&);
-
+template <class X>
+X readMatrix(const char*);
 
 #include "SPD.cpp"
 #include "EuclideanInterpolation.cpp"
@@ -76,4 +72,5 @@ void writeEigenvectors(X&, ofstream&);
 #include "LogDetInterpolation.cpp"
 #include "KLDivergenceInterpolation.cpp"
 #include "XMLOutput.cpp"
+#include "ReadMatrix.cpp"
 

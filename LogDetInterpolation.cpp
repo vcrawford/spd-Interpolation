@@ -41,14 +41,20 @@ X logDetWeightedAverage(vector<double>& weights, vector<X>& matrices,
 	X mu_sqrt;
 	X mu_sqrt_inv;
 	double grad_norm;
+	double new_grad_norm;
+	int repeat_count = 0;
 
 	do {
 		gradient = calculateLogDetGradient(mu, matrices, weights);
-		grad_norm = gradient.norm();
+		new_grad_norm = gradient.norm();
+		if (grad_norm == new_grad_norm) {
+			repeat_count++;
+		}
+		grad_norm = new_grad_norm;
 		mu_sqrt = mu.sqrt();
 		mu_sqrt_inv = mu_sqrt.inverse();
 		mu = mu_sqrt*((-1*step*mu_sqrt_inv*gradient*mu_sqrt_inv).exp())*mu_sqrt;
-	} while (grad_norm > eps);
+	} while ((grad_norm > eps) && (repeat_count < 10));
 
 	return mu;
 }
