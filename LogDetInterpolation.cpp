@@ -82,6 +82,46 @@ X calculateLogDetGradient(X& mu, vector<X>& matrices, vector<double>& weights)
 }
 
 template <class X>
+int logDetSanityCheck()
+{
+	X m1, m2, mean;
+	double m1_dist, m2_dist;
+	int wrong_count = 0;
+
+
+	for (int i = 0; i < 10; ++i) {
+		m1 = randomSPD<X>();
+		m2 = randomSPD<X>();
+		mean = logDetMean(m1, m2);
+
+		m1_dist = computeLogDetDistance(m1, mean);
+		m2_dist = computeLogDetDistance(m2, mean);
+
+		if (abs(m1_dist - m2_dist) > 0.001) {
+			wrong_count++;
+		}
+	}
+
+	return wrong_count;
+}
+
+template <class X>
+X logDetMean(X& m1, X& m2)
+{
+	vector<double> weights;
+	vector<X> matrices;
+
+	weights.push_back(0.5);
+	weights.push_back(0.5);
+
+	matrices.push_back(m1);
+	matrices.push_back(m2);
+
+	return logDetWeightedAverage(weights, matrices, 0.001, 0.001);
+}
+
+
+template <class X>
 double computeLogDetDistance(X& matrix1, X& matrix2) {
 
 	double a = log((0.5*(matrix1 + matrix2)).determinant());
@@ -89,22 +129,4 @@ double computeLogDetDistance(X& matrix1, X& matrix2) {
 
 	return a - b;
 }
-
-
-/**template <class X>
-double computeSumLogDetDistances(X& mu, vector<X>& matrices, 
-                                 vector<double>& weights)
-{
-	double sum = 0;
-	double a, b;
-
-	for (int i = 0; i < matrices.size(); ++i) {
-		a = log((0.5*(mu + matrices[i])).determinant());
-		b = 0.5*log((mu*matrices[i]).determinant());
-		sum += weights[i]*(pow((a - b), 2));
-	}
-
-	return sum;
-}
-*/
 

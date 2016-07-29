@@ -55,6 +55,43 @@ X klDivergenceWeightedAverage(vector<double>& weights, vector<X>& matrices)
 }
 
 template <class X>
+bool klDivergenceSanityCheck()
+{
+	X m1, m2, mean;
+	double m1_dist, m2_dist;
+
+	for (int i = 0; i < 10; ++i) {
+		m1 = randomSPD<X>();
+		m2 = randomSPD<X>();
+		mean = klDivergenceMean(m1, m2);
+
+		m1_dist = klDivergence(m1, mean);
+		m2_dist = klDivergence(m2, mean);
+
+		if (abs(m1_dist - m2_dist) > 0.001) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+template <class X>
+X klDivergenceMean(X& m1, X& m2)
+{
+	vector<double> weights;
+	vector<X> matrices;
+
+	weights.push_back(0.5);
+	weights.push_back(0.5);
+
+	matrices.push_back(m1);
+	matrices.push_back(m2);
+
+	return klDivergenceWeightedAverage(weights, matrices);
+}
+
+template <class X>
 double klDivergence(X& m1, X& m2)
 {
 	X m1_inv = m1.inverse();

@@ -89,3 +89,16 @@ vector<X> getGeodesic(X& P, X& Q) {
 	return constants;
 }
 
+/**
+ * Get the norm at P of S
+ */
+template <class X>
+double getNorm(X& P, X& S)
+{
+	X P_inv = P.inverse();
+	X a = P_inv*S;
+	X b = a*a;
+
+	return sqrt(a.trace());
+}
+

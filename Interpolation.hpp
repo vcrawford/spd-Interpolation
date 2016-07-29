@@ -24,6 +24,9 @@ vector< vector<double> > getEigenvectors(X&);
 template <class X>
 vector<X> getGeodesic(X&, X&);
 
+template <class X>
+double getNorm(X&, X&);
+
 template<class X>
 vector<X> euclideanInterpolation(X&, X&, int);
 
@@ -33,8 +36,26 @@ X euclideanInterpolation(X&, X&, int, int);
 template<class X>
 X euclideanWeightedAverage(vector<double>&, vector<X>&);
 
+template <class X>
+bool euclideanSanityCheck();
+
+template<class X>
+X euclideanMean(X& m1, X& m2);
+
+template<class X>
+double euclideanDistance(X&, X&);
+
 template<class X>
 vector<X> glInvariantInterpolation(X&, X&, int);
+
+template <class X>
+bool glInvariantSanityCheck();
+
+template <class X>
+X glInvariantMean(X&, X&);
+
+template <class X>
+double glInvariantDistance(X&, X&);
 
 template <class X>
 vector<X> logDetInterpolation(X&, X&, int);
@@ -46,6 +67,12 @@ template <class X>
 X calculateLogDetGradient(X&, vector<X>&, vector<double>&);
 
 template <class X>
+int logDetSanityCheck();
+
+template <class X>
+X logDetMean(X&, X&);
+
+template <class X>
 double computeLogDetDistance(X&, X&);
 
 template <class X>
@@ -53,6 +80,12 @@ vector<X> klDivergencInterpolation(X&, X&, int);
 
 template <class X>
 X klDivergenceWeightedAverage(vector<double>&, vector<X>&);
+
+template <class X>
+bool klDivergenceSanityCheck();
+
+template <class X>
+X klDivergenceMean(X&, X&);
 
 template <class X>
 double klDivergence(X&, X&);

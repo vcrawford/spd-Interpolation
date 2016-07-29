@@ -21,3 +21,50 @@ vector<X> glInvariantInterpolation(X& matrix_start, X& matrix_end, int n)
 }
 
 
+template <class X>
+bool glInvariantSanityCheck()
+{
+	X m1, m2, mean;
+	double m1_dist, m2_dist;
+
+	for (int i = 0; i < 10; ++i) {
+		m1 = randomSPD<X>();
+		m2 = randomSPD<X>();
+		mean = glInvariantMean(m1, m2);
+
+		m1_dist = glInvariantDistance(m1, mean);
+		m2_dist = glInvariantDistance(m2, mean);
+
+		if (abs(glInvariantDistance(m1, mean) - glInvariantDistance(m2, mean)) > 0.001) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+template <class X>
+X glInvariantMean(X& m1, X& m2)
+{
+	X mean;
+
+	//geodesic = geodesic[0]*e^(t*geodesic[1])*geodesic[0]
+	vector<X> geodesic = getGeodesic<X>(m1, m2);
+
+	mean = geodesic[0]*((0.5*geodesic[1]).exp())*geodesic[0];
+	
+	return mean;
+}
+
+/**
+ * Compute gl-invariant distance between two matrices
+ * by integration along the geodesic
+ * Good for sanity checks
+ */
+template <class X>
+double glInvariantDistance(X& m1, X& m2)
+{
+	return (m1.inverse()*m2).log().norm();
+}
+
+
