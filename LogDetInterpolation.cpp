@@ -81,13 +81,34 @@ X calculateLogDetGradient(X& mu, vector<X>& matrices, vector<double>& weights)
 	return gradient;
 }
 
+
 template <class X>
-int logDetSanityCheck()
+vector<string> logDetSanityCheck(X& m1, X& m2)
+{
+	double m1_dist, m2_dist, error;
+	vector<string> errors;
+
+	X mean = logDetMean(m1, m2);
+
+	m1_dist = computeLogDetDistance(m1, mean);
+	m2_dist = computeLogDetDistance(m2, mean);
+		
+	error = abs(m1_dist - m2_dist);
+
+	if (error > 0.001) {
+		errors.push_back("Error of " + to_string(error));
+	}
+
+	return errors;
+}
+
+
+template <class X>
+vector<string> logDetSanityCheck()
 {
 	X m1, m2, mean;
-	double m1_dist, m2_dist;
-	int wrong_count = 0;
-
+	double m1_dist, m2_dist, error;
+	vector<string> errors;
 
 	for (int i = 0; i < 10; ++i) {
 		m1 = randomSPD<X>();
@@ -96,14 +117,17 @@ int logDetSanityCheck()
 
 		m1_dist = computeLogDetDistance(m1, mean);
 		m2_dist = computeLogDetDistance(m2, mean);
+		
+		error = abs(m1_dist - m2_dist);
 
-		if (abs(m1_dist - m2_dist) > 0.001) {
-			wrong_count++;
+		if (error > 0.001) {
+			errors.push_back("Error of " + to_string(error));
 		}
 	}
 
-	return wrong_count;
+	return errors;
 }
+
 
 template <class X>
 X logDetMean(X& m1, X& m2)

@@ -16,18 +16,18 @@ int main(int argc, char* argv[]) {
 	vector<string> klDivergenceSanity;
 	
 	if (input_files) {
-		Matrix2f m1 = readMatrix<Matrix2f>(argv[1]);
-		Matrix2f m2 = readMatrix<Matrix2f>(argv[2]);
+		Matrix3f m1 = readMatrix<Matrix3f>(argv[1]);
+		Matrix3f m2 = readMatrix<Matrix3f>(argv[2]);
 		euclideanSanity = euclideanSanityCheck(m1, m2);
 		glInvariantSanity = glInvariantSanityCheck(m1, m2);
 		logDetSanity = logDetSanityCheck(m1, m2);
 		klDivergenceSanity = klDivergenceSanityCheck(m1, m2);
 	}
 	else {
-		euclideanSanity = euclideanSanityCheck<Matrix2f>();
-		glInvariantSanity = glInvariantSanityCheck<Matrix2f>();
-		logDetSanity = logDetSanityCheck<Matrix2f>();
-		klDivergenceSanity = klDivergenceSanityCheck<Matrix2f>();
+		euclideanSanity = euclideanSanityCheck<Matrix3f>();
+		glInvariantSanity = glInvariantSanityCheck<Matrix3f>();
+		logDetSanity = logDetSanityCheck<Matrix3f>();
+		klDivergenceSanity = klDivergenceSanityCheck<Matrix3f>();
 	}
 
 	if (euclideanSanity.size() != 0) {

@@ -51,8 +51,8 @@ def getEllipse2D(eigenvectors):
 	#print eigenvectors[0].quad
 	#print
 
-	return Ellipse(xy=[0, 0], width=m.sqrt(eigenvectors[0].eigenvalue)*2, 
-	               height=m.sqrt(eigenvectors[1].eigenvalue)*2, angle=angle, alpha=0.4)
+	return Ellipse(xy=[0, 0], width=eigenvectors[0].eigenvalue*2, 
+	               height=eigenvectors[1].eigenvalue*2, angle=angle, alpha=0.4)
 #end
 
 #Take in a list of ellipses and plot them all

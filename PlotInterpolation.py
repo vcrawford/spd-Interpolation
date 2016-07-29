@@ -7,6 +7,6 @@ filename = sys.argv[1]
 image_filename = sys.argv[2]
 count = int(sys.argv[3])
 ellipses = par.parseInterpolation(filename)
-ell.plotEllipses(ellipses, image_filename, 4, count, 1.75, 1.75)
+ell.plotEllipses(ellipses, image_filename, 4, count, 1.5, 1.5)
 
 

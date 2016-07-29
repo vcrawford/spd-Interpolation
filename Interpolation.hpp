@@ -37,7 +37,10 @@ template<class X>
 X euclideanWeightedAverage(vector<double>&, vector<X>&);
 
 template <class X>
-bool euclideanSanityCheck();
+vector<string> euclideanSanityCheck(X&, X&);
+
+template <class X>
+vector<string> euclideanSanityCheck();
 
 template<class X>
 X euclideanMean(X& m1, X& m2);
@@ -49,7 +52,10 @@ template<class X>
 vector<X> glInvariantInterpolation(X&, X&, int);
 
 template <class X>
-bool glInvariantSanityCheck();
+vector<string> glInvariantSanityCheck(X&, X&);
+
+template <class X>
+vector<string> glInvariantSanityCheck();
 
 template <class X>
 X glInvariantMean(X&, X&);
@@ -67,7 +73,10 @@ template <class X>
 X calculateLogDetGradient(X&, vector<X>&, vector<double>&);
 
 template <class X>
-int logDetSanityCheck();
+vector<string> logDetSanityCheck(X&, X&);
+
+template <class X>
+vector<string> logDetSanityCheck();
 
 template <class X>
 X logDetMean(X&, X&);
@@ -82,7 +91,10 @@ template <class X>
 X klDivergenceWeightedAverage(vector<double>&, vector<X>&);
 
 template <class X>
-bool klDivergenceSanityCheck();
+vector<string> klDivergenceSanityCheck(X&, X&);
+
+template <class X>
+vector<string> klDivergenceSanityCheck();
 
 template <class X>
 X klDivergenceMean(X&, X&);

@@ -52,22 +52,49 @@ X euclideanWeightedAverage(vector<double>& w, vector<X>& x)
 }
 
 template <class X>
-bool euclideanSanityCheck()
+vector<string> euclideanSanityCheck(X& m1, X& m2)
+{
+	double m1_dist, m2_dist, error;
+	vector<string> errors;
+
+	X mean = euclideanMean(m1, m2);
+
+	m1_dist = euclideanDistance(m1, mean);
+	m2_dist = euclideanDistance(m2, mean);
+		
+	error = abs(m1_dist - m2_dist);
+
+	if (error > 0.001) {
+		errors.push_back("Error of " + to_string(error));
+	}
+
+	return errors;
+}
+
+
+template <class X>
+vector<string> euclideanSanityCheck()
 {
 	X m1, m2, mean;
-	double distance;
+	double m1_dist, m2_dist, error;
+	vector<string> errors;
 
 	for (int i = 0; i < 10; ++i) {
 		m1 = randomSPD<X>();
 		m2 = randomSPD<X>();
 		mean = euclideanMean(m1, m2);
 
-		if (abs(euclideanDistance(m1, mean) - euclideanDistance(m2, mean)) > 0.001) {
-			return false;
+		m1_dist = euclideanDistance(m1, mean);
+		m2_dist = euclideanDistance(m2, mean);
+		
+		error = abs(m1_dist - m2_dist);
+
+		if (error > 0.001) {
+			errors.push_back("Error of " + to_string(error));
 		}
 	}
 
-	return true;
+	return errors;
 }
 
 template <class X>

@@ -54,11 +54,34 @@ X klDivergenceWeightedAverage(vector<double>& weights, vector<X>& matrices)
 	return b_inv_sqrt*(c.sqrt())*b_inv_sqrt;
 }
 
+
 template <class X>
-bool klDivergenceSanityCheck()
+vector<string> klDivergenceSanityCheck(X& m1, X& m2)
+{
+	double m1_dist, m2_dist, error;
+	vector<string> errors;
+
+	X mean = klDivergenceMean(m1, m2);
+
+	m1_dist = klDivergence(m1, mean);
+	m2_dist = klDivergence(m2, mean);
+		
+	error = abs(m1_dist - m2_dist);
+
+	if (error > 0.001) {
+		errors.push_back("Error of " + to_string(error));
+	}
+
+	return errors;
+}
+
+
+template <class X>
+vector<string> klDivergenceSanityCheck()
 {
 	X m1, m2, mean;
-	double m1_dist, m2_dist;
+	double m1_dist, m2_dist, error;
+	vector<string> errors;
 
 	for (int i = 0; i < 10; ++i) {
 		m1 = randomSPD<X>();
@@ -67,14 +90,17 @@ bool klDivergenceSanityCheck()
 
 		m1_dist = klDivergence(m1, mean);
 		m2_dist = klDivergence(m2, mean);
+		
+		error = abs(m1_dist - m2_dist);
 
-		if (abs(m1_dist - m2_dist) > 0.001) {
-			return false;
+		if (error > 0.001) {
+			errors.push_back("Error of " + to_string(error));
 		}
 	}
 
-	return true;
+	return errors;
 }
+
 
 template <class X>
 X klDivergenceMean(X& m1, X& m2)
