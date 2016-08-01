@@ -17,7 +17,7 @@ vector<X> logDetInterpolation(X& matrix_start, X& matrix_end, int n)
 		weights.push_back(1 - weight);
 		weights.push_back(weight);
 		interpolants.push_back(logDetWeightedAverage(weights, matrices, 
-								     0.001, 0.001));
+								     0.001, 0.01));
 		weight += weight_inc;
 	}
 
@@ -41,22 +41,26 @@ X logDetWeightedAverage(vector<double>& weights, vector<X>& matrices,
 	X mu_sqrt;
 	X mu_sqrt_inv;
 	double grad_norm;
-	double new_grad_norm;
-	int repeat_count = 0;
+	int count = 0;
+	//In case this has gone on for too long (measured by count) we can return the mu with 
+	//the smallest gradient
+	X best_mu = mu;
+	double best_grad_norm = 10;
 
 	do {
 		gradient = calculateLogDetGradient(mu, matrices, weights);
-		new_grad_norm = gradient.norm();
-		if (grad_norm == new_grad_norm) {
-			repeat_count++;
-		}
-		grad_norm = new_grad_norm;
+		grad_norm = gradient.norm();
 		mu_sqrt = mu.sqrt();
 		mu_sqrt_inv = mu_sqrt.inverse();
 		mu = mu_sqrt*((-1*step*mu_sqrt_inv*gradient*mu_sqrt_inv).exp())*mu_sqrt;
-	} while ((grad_norm > eps) && (repeat_count < 10));
+		count++;
+		if (grad_norm < best_grad_norm) {
+			best_mu = mu;
+			best_grad_norm = grad_norm;
+		}
+	} while ((grad_norm > 0.001) && (count < 20000));
 
-	return mu;
+	return best_mu;
 }
 
 
