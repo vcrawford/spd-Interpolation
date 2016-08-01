@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import numpy.linalg as la
 import itertools as it
+import xml.etree.ElementTree as et
 
 #An ellipsoid representing a covariance matrix 
 class Ellipsoid:
@@ -45,6 +46,7 @@ class Ellipsoid:
 		#check that doing these rotation backwards works
 		test = rotateAboutZ(self.direction, -self.z_rotate)
 		test = rotateAboutY(test, -self.y_rotate)
+
 		if abs(np.dot(test, np.array([1, 0, 0])) - 1) > 0.01:
 			raise Exception("There is something wrong with computing the y and/or z rotations.")
 
@@ -59,8 +61,8 @@ class Ellipsoid:
 			raise Exception("After the Z and Y rotations, the eigenvector to be rotated to " +
 			  					 "the y-axis is not in the YZ plane.")
 
-		#Find the rotation about the x-axis to bring this down to the pos y-axis
-		self.x_rotate = -getXRotation(rotate_to_y)
+		#Find the rotation about the x-axis to bring the pos y-axis to this
+		self.x_rotate = getXRotation(rotate_to_y)
 
 		test = rotateAboutX(rotate_to_y, -self.x_rotate)
 		if abs(abs(np.dot(test, np.array([0, 1, 0]))) - 1) > 0.01:
@@ -121,17 +123,17 @@ def getTheta(vec):
 	x_axis = np.array([1, 0, 0])
 	return np.rad2deg(np.arccos((x_axis.dot(xy_proj))/(la.norm(x_axis)*la.norm(xy_proj))))
 
-#If this vector were to be projected onto the XZ plane, then how many degrees clockwise 
-#about the Y axis must it turn to align with the positive x-axis
+#If this vector were to be projected onto the XZ plane, then how many degrees 
+#about the Y axis must the pos X axis turn to align with it
 def getYRotation(vec):
 	y_rotate = getPhi(vec)
-	if vec[0] >= 0:
+	if vec[2] > 0:
 		y_rotate = 360 - y_rotate
 	return y_rotate
 #END
 
 #If a vector were to be projected onto the XY plane, then how many degrees counter-clockwise
-#about the Z axis must it be turned to align with the positive x-axis
+#about the Z axis must the x-axis turn to align with it
 def getZRotation(vec):
 	z_rotate = getTheta(vec)
 	if vec[1] < 0:
@@ -140,12 +142,11 @@ def getZRotation(vec):
 #END
 
 #This assumes vec is in the YZ plane
-#How many degrees must the vec be rotated about the X axis counter-clockwise to be aligned 
-#with the positive y-axis
+#How many degrees must the pos y-axis be rotated about the x axis to be aligned with it
 def getXRotation(vec):
 	y_axis = np.array([0, 1, 0])
 	x_rotate = np.rad2deg(np.arccos((np.dot(y_axis, vec))/(la.norm(y_axis)*la.norm(vec))))
-	if vec[2] > 0:
+	if vec[2] < 0:
 		x_rotate = 360 - x_rotate
 	return x_rotate
 #END
@@ -197,7 +198,6 @@ def plotEllipsoids(ellipsoids, num_rows, num_cols, filename, max_x, max_y, max_z
 	fig.tight_layout()
 	plt.subplots_adjust(wspace=0, hspace=0)
 	fig.savefig(filename)
-	plt.show()
 #END
 
 
@@ -220,22 +220,28 @@ def getEllipsePoints(x_c, y_c, z_c):
 	return ellipse_points
 #END
 
+def parseInterpolation(file_name):
 
-ellipsoids = []
-for i in range(9):
-	arr = np.random.rand(3, 3)
-	arr = arr*arr.transpose()
-	ellipsoids.append(Ellipsoid(arr))
+	interp_xml = et.parse(file_name)
 
-plotEllipsoids(ellipsoids, 3, 3, "ellipsoid.png", 1.5, 1.5, 1.5)
+	interpolations = interp_xml.getroot()
 
+	#array of Ellipse objects
+	ellipses = []
 
-#vec = Vector3D([-1, 1, 1])
-#rot = vec.getRotation()
+	for interpolation in interpolations:
+		for matrix in interpolation:
+			np_mat = []
 
-#ellipsoids = []
-#points = getEllipsePoints(1.5, 0.3, 0.3)
-#ellipsoids.append(points)
-#ellipsoids.append(getEllipseCoordinates(.8, .1, .5))
-#ellipsoids.append(getEllipseCoordinates(.5, .2, .5))
-#ellipsoids.append(getEllipseCoordinates(.1, 1.3, 1.5))
+			for row in matrix:
+				np_mat.append(map(float, row.text.split(",")))
+
+			ellipses.append(Ellipsoid(np_mat))			
+
+	return ellipses
+#
+
+ellipsoids = parseInterpolation("interpolation.xml")
+
+plotEllipsoids(ellipsoids, 4, 9, "interpolate3D.png", 1.5, 1.5, 1.5)
+
