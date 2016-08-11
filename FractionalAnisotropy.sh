@@ -1,10 +1,10 @@
 #! /bin/bash
 # Interpolate 9 matrix1.txt matrix2.txt 
 
-image_output="interpolate.png"
+image_output="fractionalanisotropy.png"
 matrix_input1="matrix1.txt"
 matrix_input2="matrix2.txt"
-image_count=9
+image_count=25
 
 #echo ""
 #echo "===GENERATING RANDOM MATRICES==="
@@ -20,7 +20,7 @@ image_count=9
 echo "Plotting..."
 
 #Run the python graphing code
-python PlotInterpolation.py interpolation.xml $image_output $image_count
+python PlotFractionalAnisotropy.py interpolation.xml $image_output
 
 #display image
 display $image_output

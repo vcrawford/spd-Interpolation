@@ -25,7 +25,7 @@ class Ellipsoid:
 		for i, eig1 in enumerate(self.eigenvectors):
 			for j, eig2 in enumerate(self.eigenvectors):
 				if i is not j:
-					if abs(np.dot(eig1, eig2)) > 0.001:
+					if abs(np.dot(eig1, eig2)) > 0.01:
 						raise Exception("Not all input eigenvectors are orthogonal.")
 
 

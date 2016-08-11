@@ -31,17 +31,23 @@ int main(int argc, char* argv[]) {
 		throw exception();
 	}
 
+	vector<string> interp_types;
+
 	cout << "Computing Euclidean interpolation" << endl;
 	vector<Matrix2f> interpolants_euclid = euclideanInterpolation(matrix1, matrix2, count);
+	interp_types.push_back("euclid");
 
 	cout << "Computing GL-invariant interpolation" << endl;
 	vector<Matrix2f> interpolants_gl = glInvariantInterpolation(matrix1, matrix2, count);
+	interp_types.push_back("gl");
 
 	cout << "Computing LogDet interpolation" << endl;
 	vector<Matrix2f> interpolants_logdet = logDetInterpolation(matrix1, matrix2, count);
+	interp_types.push_back("logdet");
 
 	cout << "Computing KL-divergence interpolation" << endl;
 	vector<Matrix2f> interpolants_kl = klDivergenceInterpolation(matrix1, matrix2, count);
+	interp_types.push_back("kl");
 
 	vector< vector<Matrix2f> > interpolants;
 
@@ -51,7 +57,7 @@ int main(int argc, char* argv[]) {
 	interpolants.push_back(interpolants_kl);
 
 	cout << "Writing to XML file" << endl;
-	writeInterpolations(interpolants, "interpolation.xml");
+	writeInterpolations(interpolants, interp_types, "interpolation.xml");
 
 	cout << "Finished" << endl;
 }

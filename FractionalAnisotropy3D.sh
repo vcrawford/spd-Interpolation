@@ -1,16 +1,15 @@
 #! /bin/bash
 # Interpolate 9 matrix1.txt matrix2.txt 
 
-image_output="interpolate3D.png"
+image_output="fractionalanisotropy.png"
 matrix_input1="matrix1-3D.txt"
 matrix_input2="matrix2-3D.txt"
-image_count=9
+image_count=25
 
 #echo ""
 #echo "===GENERATING RANDOM MATRICES==="
-#Generate random SPD matrices
-#python RandomSPD.py 3 $matrix_input1
-#python RandomSPD.py 3 $matrix_input2
+#python RandomSPD.py 2 $matrix_input1
+#python RandomSPD.py 2 $matrix_input2
 
 #Run a sanity check for those matrices
 ./SanityCheck3D $matrix_input1 $matrix_input2
@@ -21,9 +20,8 @@ image_count=9
 echo "Plotting..."
 
 #Run the python graphing code
-python PlotEllipsoidsFromMatrix.py
+python PlotFractionalAnisotropy.py interpolation.xml $image_output
 
 #display image
 display $image_output
 
-echo ""

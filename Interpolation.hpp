@@ -103,7 +103,7 @@ template <class X>
 double klDivergence(X&, X&);
 
 template<class X>
-void writeInterpolations(vector< vector<X> >&, const char*);
+void writeInterpolations(vector< vector<X> >&, vector<string>&, const char*);
 
 template<class X>
 void writeMatrix(X&, ofstream&);
